@@ -17,9 +17,8 @@ from torchvision import models, transforms
 st.set_page_config(page_title="Pink October AI Diagnostics", page_icon="🎀", layout="wide")
 
 # ------------------------------------------------------------------
-# 2. Inject Tailwind, Lucide, and Custom CSS (Exactly from your HTML)
+# 2. Inject Tailwind, Lucide, and Custom CSS
 # ------------------------------------------------------------------
-# Load Tailwind and Lucide via CDN
 st.markdown(
     textwrap.dedent("""
     <script src="https://cdn.tailwindcss.com"></script>
@@ -29,18 +28,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Inject custom CSS from your HTML file
 st.markdown(
     textwrap.dedent("""
     <style>
-    /* Hide Streamlit Defaults */
     #MainMenu, header, footer { visibility: hidden; }
     .block-container { max-width: 1100px; padding-top: 2rem; padding-bottom: 2rem; }
     
-    /* Base Body styles */
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #1e293b; }
     
-    /* Mesh Gradient Background */
     .stApp {
         background-color: #fdf2f8;
         background-image: 
@@ -50,7 +45,6 @@ st.markdown(
             radial-gradient(at 80% 90%, rgba(251, 207, 232, 0.6) 0px, transparent 50%);
     }
     
-    /* Glassmorphism */
     .glass-card {
         background: rgba(255, 255, 255, 0.75);
         backdrop-filter: blur(16px);
@@ -59,19 +53,15 @@ st.markdown(
         border-radius: 24px;
         padding: 2rem;
         box-shadow: 0 10px 40px -10px rgba(131, 24, 67, 0.1);
+        margin-bottom: 1.5rem;
     }
     
-    /* Gradient Text */
     .pink-gradient-text {
         background: linear-gradient(135deg, #be185d 0%, #ec4899 50%, #9d174d 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
     
-    /* Style Streamlit File Uploader to match your HTML */
-    [data-testid="stFileUploader"] {
-        background: transparent;
-    }
     [data-testid="stFileUploader"] section {
         background: rgba(255, 255, 255, 0.4);
         border: 3px dashed #f472b6;
@@ -84,7 +74,6 @@ st.markdown(
         border-color: #db2777;
     }
     
-    /* Streamlit Tabs styled like a Menu Bar */
     .stTabs [data-baseweb="tab-list"] {
         gap: 1rem;
         background: rgba(255, 255, 255, 0.6);
@@ -141,7 +130,7 @@ def to_data_uri(img) -> str:
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
 # ------------------------------------------------------------------
-# 4. Header / Hero (Exactly as your HTML)
+# 4. Header / Hero
 # ------------------------------------------------------------------
 st.markdown(
     textwrap.dedent("""
@@ -175,7 +164,6 @@ tab1, tab2, tab3 = st.tabs(["🔬 App Home", "📖 About Project", "💬 AI Assi
 # TAB 1: MAIN APP
 # ==================================================================
 with tab1:
-    # Uploader inside a glass card
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("Drop your histopathology slide image here", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
     st.markdown('</div>', unsafe_allow_html=True)
@@ -202,7 +190,6 @@ with tab1:
             conf_color = "text-pink-600" if is_malignant else "text-emerald-600"
             finding_text = "The model highlighted dense, pleomorphic cellular clustering with elevated nucleus-to-cytoplasm ratios in the highlighted thermal region, indicative of malignant ductal hyperplasia." if is_malignant else "Normal glandular duct structures with uniform cell distribution. No significant nuclear hyperchromasia detected across the evaluated tile."
 
-        # Render Results in Tailwind HTML (Unindented to prevent Markdown code block)
         result_html = f"""
         <div class="glass-card mt-6">
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-pink-100">
@@ -249,33 +236,34 @@ with tab1:
         st.markdown(result_html, unsafe_allow_html=True)
 
 # ==================================================================
-# TAB 2: ABOUT PROJECT (Fixed Markdown issue using textwrap.dedent)
+# TAB 2: ABOUT PROJECT (FIXED: Using Native Streamlit Components)
 # ==================================================================
 with tab2:
-    about_html = textwrap.dedent("""
-    <div class="glass-card">
-        <h2 class="text-3xl font-serif font-bold text-pink-900 mb-4">📖 About This Project</h2>
-        <p class="text-lg text-slate-600 mb-6">Built as a submission for Pinktober (Breast Cancer Awareness Month) to demonstrate how Explainable AI can bridge the gap between machine learning and clinical trust.</p>
+    # We use pure Streamlit layout here to guarantee text never breaks into HTML code blocks.
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    
+    st.markdown("## 📖 About This Project")
+    st.markdown("Built as a submission for Pinktober (Breast Cancer Awareness Month) to demonstrate how Explainable AI can bridge the gap between machine learning and clinical trust.")
+    
+    st.write("---")
+    
+    col1, col2 = st.columns(2, gap="large")
+    
+    with col1:
+        st.markdown("#### 📊 The Dataset")
+        st.write("I used the **BreaKHis** (Breast Cancer Histopathological Database), which contains thousands of microscopic images of breast tumor tissue collected from clinical cases, labeled as benign or malignant by expert pathologists.")
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-                <h4 class="text-xl font-bold text-pink-700 mb-2">📊 The Dataset</h4>
-                <p class="text-slate-600 mb-6">I used the <b>BreaKHis</b> (Breast Cancer Histopathological Database), which contains thousands of microscopic images of breast tumor tissue collected from clinical cases, labeled as benign or malignant by expert pathologists.</p>
-                
-                <h4 class="text-xl font-bold text-pink-700 mb-2">🔍 Explainable AI (Grad-CAM)</h4>
-                <p class="text-slate-600">Standard AI is a "black box." I implemented <b>Grad-CAM</b> to generate the heatmaps shown in the app. This visually explains exactly which cellular regions influenced the prediction, giving pathologists transparency and trust in the model.</p>
-            </div>
-            <div>
-                <h4 class="text-xl font-bold text-pink-700 mb-2">🧠 The AI Model</h4>
-                <p class="text-slate-600 mb-6">The model is based on <b>MobileNetV2</b>, utilizing Transfer Learning. It was trained using PyTorch and achieved a <b>97.22%</b> accuracy on unseen test images.</p>
-
-                <h4 class="text-xl font-bold text-pink-700 mb-2">💻 Tech Stack</h4>
-                <p class="text-slate-600">Built with Python, PyTorch, Streamlit, and Grad-CAM. The complete source code is available on <a href="https://github.com/roykashif11-alt/pinktober-breast-ai" target="_blank" class="text-pink-600 font-bold hover:underline">GitHub</a>.</p>
-            </div>
-        </div>
-    </div>
-    """)
-    st.markdown(about_html, unsafe_allow_html=True)
+        st.markdown("#### 🔍 Explainable AI (Grad-CAM)")
+        st.write("Standard AI is a 'black box.' I implemented **Grad-CAM** to generate the heatmaps shown in the app. This visually explains exactly which cellular regions influenced the prediction, giving pathologists transparency and trust in the model.")
+        
+    with col2:
+        st.markdown("#### 🧠 The AI Model")
+        st.write("The model is based on **MobileNetV2**, utilizing Transfer Learning. It was trained using PyTorch and achieved a **97.22%** accuracy on unseen test images.")
+        
+        st.markdown("#### 💻 Tech Stack")
+        st.write("Built with Python, PyTorch, Streamlit, and Grad-CAM. The complete source code is available on [GitHub](https://github.com/roykashif11-alt/pinktober-breast-ai).")
+        
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ==================================================================
 # TAB 3: AI ASSISTANT (CHATBOT)
@@ -291,16 +279,13 @@ with tab3:
         unsafe_allow_html=True
     )
 
-    # Initialize chat history
     if "messages" not in st.session_state:
         st.session_state.messages = [{"role": "assistant", "content": "Hello! I am your AI assistant. Ask me anything about breast cancer, this project's architecture, or how Grad-CAM works."}]
 
-    # Display chat messages
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    # Accept user input
     if prompt := st.chat_input("Ask a question..."):
         st.chat_message("user").markdown(prompt)
         st.session_state.messages.append({"role": "user", "content": prompt})
@@ -326,7 +311,7 @@ with tab3:
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 # ------------------------------------------------------------------
-# 6. Footer (Exactly as your HTML)
+# 6. Footer
 # ------------------------------------------------------------------
 st.markdown(
     textwrap.dedent("""
