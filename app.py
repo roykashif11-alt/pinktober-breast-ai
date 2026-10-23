@@ -24,10 +24,10 @@ CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap');
 
 :root{
-  --ink:#0F172A;          /* Dark slate for text */
+  --ink:#0F172A;
   --glass:rgba(255, 255, 255, 0.7);
-  --eosin:#E0568F;        /* Pink accent */
-  --hema:#4C1D95;         /* Deep purple accent */
+  --eosin:#E0568F;
+  --hema:#4C1D95;
   --benign:#0EA5E9;
   --malignant:#E11D48;
 }
@@ -37,7 +37,6 @@ html, body, [class*="css"], .stApp{
   color:var(--ink);
 }
 
-/* Premium Mesh Gradient Background */
 .stApp{
   background-color: #FDF2F8;
   background-image: 
@@ -103,33 +102,26 @@ h1,h2,h3,.serif{font-family:'Outfit',sans-serif !important; color:var(--ink); fo
   border-color: var(--hema);
   box-shadow: 0 4px 20px rgba(224, 86, 143, 0.15);
 }
-[data-testid="stFileUploader"] button{
-  background: var(--hema); 
-  color:#fff; 
-  border:none; 
-  border-radius:10px;
-  padding: 0.5rem 1.5rem;
-  font-weight: 600;
-}
 
-/* ---------- Empty State Steps ---------- */
+/* ---------- Steps (Informational) ---------- */
 .steps-container {
   display: flex; gap: 1.5rem; margin-top: 3rem; justify-content: center;
 }
 .step-card {
   flex: 1;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 16px;
   padding: 1.5rem;
-  border: 1px solid #fff;
+  border: 1px solid rgba(255,255,255,0.6);
   text-align: center;
+  cursor: default; /* Ensures it doesn't look clickable */
 }
 .step-num {
   background: var(--eosin); color: white; width: 32px; height: 32px;
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
   font-weight: bold; margin: 0 auto 1rem auto;
 }
-.step-card h4 { margin: 0 0 0.5rem 0; font-family: 'Outfit'; font-size: 1.2rem; }
+.step-card h4 { margin: 0 0 0.5rem 0; font-family: 'Outfit'; font-size: 1.2rem; color: var(--hema); }
 .step-card p { font-size: 0.9rem; color: #64748B; margin: 0; line-height: 1.4; }
 
 /* ---------- Verdict ---------- */
@@ -171,10 +163,22 @@ h1,h2,h3,.serif{font-family:'Outfit',sans-serif !important; color:var(--ink); fo
 }
 .panel h3{margin-top:0; margin-bottom: 1.5rem;}
 
-/* ---------- Legend ---------- */
-.legend{height:12px; border-radius:99px; margin-top: 1rem;
-  background:linear-gradient(90deg,#2a1fa0,#2ec4d6,#9be24f,#ffd23f,#e8332b);}
-.legend-labels{display:flex; justify-content:space-between; font-size:.85rem; color:#64748B; margin-top:.5rem; font-weight: 500;}
+/* ---------- About Section ---------- */
+.about-section {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 2.5rem;
+  margin-top: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 40px -10px rgba(76, 29, 149, 0.1);
+}
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;
+}
+.about-item h4 { margin: 0 0 0.5rem 0; color: var(--hema); font-family: 'Outfit'; font-size: 1.2rem;}
+.about-item p { margin: 0; color: #475569; font-size: 0.95rem; line-height: 1.5; }
+.about-item a { color: var(--eosin); text-decoration: none; font-weight: 600;}
 
 /* ---------- Sidebar & Socials ---------- */
 section[data-testid="stSidebar"]{background:#0F172A;}
@@ -185,14 +189,14 @@ section[data-testid="stSidebar"] h2{font-family:'Outfit',sans-serif !important; 
 .side-note a { color: #FDF2F8 !important; text-decoration: none; font-weight: 600; transition: color 0.2s; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 6px; display: inline-block; margin-top: 5px;}
 .side-note a:hover { color: #fff !important; background: var(--eosin); }
 
-.disclaimer{
-  margin-top:2rem; padding:1.2rem; border-left:4px solid var(--eosin);
-  background:rgba(255,255,255,0.6); border-radius:0 12px 12px 0; font-size:.95rem; color: #475569;
-}
+/* ---------- Legend & Disclaimer ---------- */
+.legend{height:12px; border-radius:99px; margin-top: 1rem; background:linear-gradient(90deg,#2a1fa0,#2ec4d6,#9be24f,#ffd23f,#e8332b);}
+.legend-labels{display:flex; justify-content:space-between; font-size:.85rem; color:#64748B; margin-top:.5rem; font-weight: 500;}
+.disclaimer{margin-top:2rem; padding:1.2rem; border-left:4px solid var(--eosin); background:rgba(255,255,255,0.6); border-radius:0 12px 12px 0; font-size:.95rem; color: #475569;}
 
 /* ---------- Footer ---------- */
 .custom-footer {
-    text-align: center; margin-top: 5rem; padding: 2rem 0;
+    text-align: center; margin-top: 3rem; padding: 2rem 0;
     border-top: 1px solid rgba(0,0,0,0.05); font-size: 0.95rem; color: #64748B;
 }
 .custom-footer a { color: var(--hema); text-decoration: none; font-weight: 600; margin: 0 10px; transition: color 0.2s;}
@@ -262,9 +266,8 @@ with st.sidebar:
         "</div>", unsafe_allow_html=True)
 
 # ------------------------------------------------------------------
-# 5. Hero Section (With Base64 SVG Ribbon for guaranteed loading)
+# 5. Hero Section
 # ------------------------------------------------------------------
-# This is a clean, beautiful SVG path for a breast cancer ribbon
 svg_ribbon = """<svg class="ribbon-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <path d="M50 10 C30 10 20 30 35 50 L15 90 L30 95 L50 65 L70 95 L85 90 L65 50 C80 30 70 10 50 10 Z" fill="#E0568F"/>
   <path d="M50 10 C30 10 20 30 35 50 L15 90 L30 95 L50 65 L70 95 L85 90 L65 50 C80 30 70 10 50 10 Z" fill="url(#grad)" opacity="0.4"/>
@@ -281,7 +284,7 @@ st.markdown(f"""
   {svg_ribbon}
   <div class="hero-text">
     <h1>See what the model sees.</h1>
-    <p>Upload a stained tissue slide. The AI classifies it as benign or malignant, then uses Grad-CAM to visually highlight which regions of the tissue drove that decision. Built for Breast Cancer Awareness Month.</p>
+    <p>Upload a stained tissue slide. The AI classifies it as benign or malignant, then uses Grad-CAM to visually highlight which regions of the tissue drove that decision.</p>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -352,7 +355,7 @@ if uploaded_file is not None:
     """, unsafe_allow_html=True)
 
 else:
-    # Empty State: Show 3 elegant steps when no image is uploaded
+    # Empty State Steps
     st.markdown("""
     <div class="steps-container">
         <div class="step-card">
@@ -374,7 +377,36 @@ else:
     """, unsafe_allow_html=True)
 
 # ------------------------------------------------------------------
-# 7. Custom Footer
+# 7. NEW "About This Project" Section
+# ------------------------------------------------------------------
+st.markdown("""
+<div class="about-section">
+    <h2 style="margin-top: 0; color: var(--hema); font-family: 'Outfit';">About This Project</h2>
+    <p style="color: #475569; font-size: 1.05rem;">Built as a submission for Pinktober (Breast Cancer Awareness Month) to demonstrate how Explainable AI can bridge the gap between machine learning and clinical trust.</p>
+    
+    <div class="about-grid">
+        <div class="about-item">
+            <h4>📊 The Dataset</h4>
+            <p>I used the <b>BreaKHis</b> (Breast Cancer Histopathological Database), which contains thousands of microscopic images of breast tumor tissue collected from clinical cases, labeled as benign or malignant.</p>
+        </div>
+        <div class="about-item">
+            <h4>🧠 The AI Model</h4>
+            <p>The model is based on <b>MobileNetV2</b>, utilizing Transfer Learning. It was trained using <b>PyTorch</b> and achieved a <b>97.22%</b> accuracy on unseen test images.</p>
+        </div>
+        <div class="about-item">
+            <h4>🔍 Explainable AI (Grad-CAM)</h4>
+            <p>Standard AI is a "black box." I implemented <b>Grad-CAM</b> (Gradient-weighted Class Activation Mapping) to generate the heatmaps. This shows pathologists exactly which cells influenced the prediction.</p>
+        </div>
+        <div class="about-item">
+            <h4>💻 The Tech Stack & Code</h4>
+            <p>The app is built with <b>Python</b>, <b>PyTorch</b>, and <b>Streamlit</b>. The complete source code, including the training scripts and web app, is open-source on <a href="https://github.com/roykashif11-alt/pinktober-breast-ai" target="_blank">GitHub</a>.</p>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# ------------------------------------------------------------------
+# 8. Custom Footer
 # ------------------------------------------------------------------
 st.markdown("""
 <div class="custom-footer">
@@ -382,7 +414,8 @@ st.markdown("""
     <p>Developed by <b>Kashif Sultan</b></p>
     <p>
         <a href="https://www.linkedin.com/in/kashif-sultan11" target="_blank">LinkedIn</a> • 
-        <a href="https://www.instagram.com/kashif_rashtiic/" target="_blank">Instagram</a>
+        <a href="https://www.instagram.com/kashif_rashtiic/" target="_blank">Instagram</a> •
+        <a href="https://github.com/roykashif11-alt/pinktober-breast-ai" target="_blank">GitHub</a>
     </p>
 </div>
 """, unsafe_allow_html=True)
