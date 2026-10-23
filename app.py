@@ -15,7 +15,7 @@ from torchvision import models, transforms
 # 1. Page config
 # ------------------------------------------------------------------
 st.set_page_config(page_title="Slide Reader · Explainable Breast Cancer AI",
-                   page_icon="🔬", layout="wide")
+                   page_icon="🎀", layout="wide")
 
 # ------------------------------------------------------------------
 # 2. Design system
@@ -119,17 +119,28 @@ h1,h2,h3,.serif{font-family:'Fraunces',serif !important; color:var(--ink);}
   background:linear-gradient(90deg,#2a1fa0,#2ec4d6,#9be24f,#ffd23f,#e8332b);}
 .legend-labels{display:flex; justify-content:space-between; font-size:.8rem; color:#4a3f66; margin-top:.3rem;}
 
-/* ---------- sidebar ---------- */
+/* ---------- sidebar & socials ---------- */
 section[data-testid="stSidebar"]{background:var(--ink);}
 section[data-testid="stSidebar"] *{color:#EDE6F7 !important;}
 section[data-testid="stSidebar"] h2{font-family:'Fraunces',serif !important; color:#fff !important;}
 .side-stat{font-family:'Fraunces',serif; font-size:3rem; font-weight:800; color:var(--eosin) !important; line-height:1;}
 .side-note{font-size:.9rem; opacity:.85; line-height:1.5;}
+.side-note a { color: var(--eosin) !important; text-decoration: none; font-weight: 600; transition: color 0.2s;}
+.side-note a:hover { color: #fff !important; }
 
 .disclaimer{
   margin-top:2rem; padding:1rem 1.3rem; border-left:5px solid var(--eosin);
   background:rgba(255,255,255,.7); border-radius:0 12px 12px 0; font-size:.9rem;
 }
+
+/* ---------- custom footer ---------- */
+.custom-footer {
+    text-align: center; margin-top: 4rem; padding-top: 2rem;
+    border-top: 1px solid var(--stroma); font-size: 0.9rem; color: #4a3f66;
+}
+.custom-footer a { color: var(--eosin); text-decoration: none; font-weight: 600; margin: 0 10px; }
+.custom-footer a:hover { text-decoration: underline; }
+
 @media (prefers-reduced-motion:no-preference){
   .verdict{animation:rise .6s ease-out both;}
   @keyframes rise{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
@@ -196,6 +207,15 @@ with st.sidebar:
         "<b>Explanation method</b><br>Grad-CAM highlights the tissue regions that pushed "
         "the model toward its answer."
         "</div>", unsafe_allow_html=True)
+    
+    st.markdown("---")
+    # Added Developer Social Links here
+    st.markdown(
+        '<div class="side-note">'
+        "<b>Connect with the Developer</b><br><br>"
+        '<a href="https://www.linkedin.com/in/kashif-sultan11" target="_blank">LinkedIn ↗</a><br>'
+        '<a href="https://www.instagram.com/kashif_rashtiic/" target="_blank">Instagram ↗</a>'
+        "</div>", unsafe_allow_html=True)
 
 # ------------------------------------------------------------------
 # 5. Hero
@@ -203,8 +223,11 @@ with st.sidebar:
 st.markdown("""
 <div class="hero">
   <div class="ribbon"><i></i> Breast Cancer Awareness Month</div>
-  <h1>See what the model sees.</h1>
-  <p>Upload a stained tissue slide. The model classifies it as benign or malignant,
+  <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Breast_Cancer_Awareness_Ribbon.svg/200px-Breast_Cancer_Awareness_Ribbon.svg.png" width="60" alt="Pink Ribbon">
+    <h1 style="margin: 0;">See what the model sees.</h1>
+  </div>
+  <p style="margin-top: 1rem;">Upload a stained tissue slide. The model classifies it as benign or malignant,
   then shows which regions of the tissue drove that decision.</p>
 </div>
 """, unsafe_allow_html=True)
@@ -277,3 +300,17 @@ if uploaded_file is not None:
     not a diagnostic device. Do not use it for medical decisions. A qualified pathologist
     should review any real case.</div>
     """, unsafe_allow_html=True)
+
+# ------------------------------------------------------------------
+# 7. Custom Footer (Added Developer Info)
+# ------------------------------------------------------------------
+st.markdown("""
+<div class="custom-footer">
+    <p>Built with PyTorch & Streamlit for Pinktober 2024 🎀</p>
+    <p>Developed by <b>Kashif Sultan</b></p>
+    <p>
+        <a href="https://www.linkedin.com/in/kashif-sultan11" target="_blank">LinkedIn</a> • 
+        <a href="https://www.instagram.com/kashif_rashtiic/" target="_blank">Instagram</a>
+    </p>
+</div>
+""", unsafe_allow_html=True)
