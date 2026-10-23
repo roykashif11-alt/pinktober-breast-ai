@@ -89,10 +89,8 @@ with st.sidebar:
 # ------------------------------------------------------------------
 # 5. Header / Hero (With Pink Ribbon)
 # ------------------------------------------------------------------
-# The ribbon is embedded as a Base64 SVG so it NEVER fails to load
 ribbon_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNTAgMTAgQzMwIDEwIDIwIDMwIDM1IDUwIEwxNSA5MCBMMzAgOTUgTDUwIDY1IEw3MCA5NSBMODUgOTAgTDY1IDUwIEM4MCAzMCA3MCAxMCA1MCAxMCBaIiBmaWxsPSIjRTA1NjhGIi8+PHBhdGggZD0iTTUwIDEwIEMzMCAxMCAyMCAzMCAzNSA1MCBMMTUgOTAgTDMwIDk1IEw1MCA2NSBMNzAgOTUgTDg1IDkwIEw2NSA1MCBDODAgMzAgNzAgMTAgNTAgMTAgWiIgZmlsbD0idXJsKCNncmFkKSIgb3BhY2l0eT0iMC40Ii8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZmZmZmO3N0b3Atb3BhY2l0eToxIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRTA1NjhGO3N0b3Atb3BhY2l0eTowIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PC9zdmc+"
 
-# Entire HTML string is on a single line to prevent Streamlit code-block bug
 hero_html = f'<div class="text-center mb-8 relative z-10"><div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-100/80 border border-pink-300 text-pink-800 text-xs md:text-sm font-semibold shadow-sm mb-6"><span class="text-base">🎀</span><span>Breast Cancer Awareness Month</span><span class="w-1.5 h-1.5 rounded-full bg-pink-600 inline-block"></span><span class="text-pink-600">Pink October</span></div><div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;"><img src="{ribbon_svg}" style="width: 90px; filter: drop-shadow(0 10px 15px rgba(224, 86, 143, 0.4));" alt="Pink Ribbon"><h1 class="text-4xl md:text-6xl font-serif font-extrabold tracking-tight mb-0 text-slate-900">See what the <span class="pink-gradient-text">model sees.</span></h1></div><p class="max-w-2xl mx-auto text-slate-600 text-base md:text-lg leading-relaxed mt-6">Upload a stained histopathology tissue slide. Our PyTorch AI model classifies it as <span class="font-semibold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded">benign</span> or <span class="font-semibold text-pink-800 bg-pink-100/80 px-2 py-0.5 rounded">malignant</span>, and visualizes critical regions with Grad-CAM heatmaps.</p></div>'
 st.markdown(hero_html, unsafe_allow_html=True)
 
@@ -127,7 +125,6 @@ with tab1:
             conf_color = "text-pink-600" if is_malignant else "text-emerald-600"
             finding_text = "The model highlighted dense, pleomorphic cellular clustering with elevated nucleus-to-cytoplasm ratios in the highlighted thermal region, indicative of malignant ductal hyperplasia." if is_malignant else "Normal glandular duct structures with uniform cell distribution. No significant nuclear hyperchromasia detected across the evaluated tile."
 
-        # Single line HTML for Results
         result_html = f'<div class="glass-card mt-6"><div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-pink-100"><div><span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Model Classification Output</span><div class="flex items-center gap-3 mt-1"><h2 class="text-2xl md:text-3xl font-bold {text_color}">{verdict} Detected</h2><span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border {badge_color}">High Confidence</span></div></div><div class="flex items-center gap-4 bg-white/80 border border-pink-100 rounded-2xl p-3 px-5 shadow-sm"><div class="text-right"><div class="text-xs text-slate-500 font-medium">Confidence Score</div><div class="text-2xl font-black {conf_color}">{confidence:.1%}</div></div></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"><div class="space-y-2"><div class="flex items-center justify-between"><span class="text-sm font-semibold text-slate-700">Original Histopathology Slide</span></div><div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 aspect-video"><img src="{to_data_uri(pil_img.resize((448, 448)))}" class="w-full h-full object-cover"></div></div><div class="space-y-2"><div class="flex items-center justify-between"><span class="text-sm font-semibold text-slate-700">Grad-CAM Attention Heatmap</span></div><div class="relative rounded-2xl overflow-hidden border border-pink-300 bg-slate-900 aspect-video shadow-inner"><img src="{to_data_uri(Image.fromarray(overlay).resize((448, 448)))}" class="w-full h-full object-cover"></div></div></div><div class="mt-6 p-4 md:p-5 rounded-2xl bg-pink-50/60 border border-pink-200/80"><h4 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-2">AI Feature Highlight</h4><p class="text-sm text-slate-600 leading-relaxed">{finding_text}</p></div></div>'
         st.markdown(result_html, unsafe_allow_html=True)
 
@@ -187,7 +184,15 @@ with tab3:
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 # ------------------------------------------------------------------
-# 7. Footer
+# 7. Footer (Explicit Inline CSS to guarantee visibility)
 # ------------------------------------------------------------------
-footer_html = '<footer class="mt-12 pt-8 border-t border-pink-200/60 text-center space-y-3 relative z-10"><p class="text-xs md:text-sm font-medium text-slate-600 flex items-center justify-center gap-1.5 flex-wrap">Built with <span class="font-semibold text-pink-700">PyTorch</span> & <span class="font-semibold text-pink-700">Streamlit</span> for Pink October 🎀</p><p class="text-xs text-slate-500">Developed by <span class="font-semibold text-slate-800">Kashif Sultan</span></p><div class="flex items-center justify-center gap-4 text-xs font-semibold text-pink-600 pt-1"><a href="https://www.linkedin.com/in/kashif-sultan11" target="_blank" class="hover:text-pink-800 hover:underline transition-colors">LinkedIn</a><span>•</span><a href="https://www.instagram.com/kashif_rashtiic/" target="_blank" class="hover:text-pink-800 hover:underline transition-colors">Instagram</a><span>•</span><a href="https://github.com/roykashif11-alt/pinktober-breast-ai" target="_blank" class="hover:text-pink-800 hover:underline transition-colors">GitHub</a></div></footer>'
+footer_html = '''<div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(251, 207, 232, 0.6); text-align: center;">
+    <p style="color: #475569; font-size: 0.9rem; margin-bottom: 10px;">Built with <b style="color: #be185d;">PyTorch</b> & <b style="color: #be185d;">Streamlit</b> for Pink October 🎀</p>
+    <p style="color: #475569; font-size: 0.95rem; margin-bottom: 15px;">Developed by <b style="color: #0f172a;">Kashif Sultan</b></p>
+    <p>
+        <a href="https://www.linkedin.com/in/kashif-sultan11" target="_blank" style="color: #db2777; font-weight: bold; text-decoration: none; margin: 0 10px;">LinkedIn</a> • 
+        <a href="https://www.instagram.com/kashif_rashtiic/" target="_blank" style="color: #db2777; font-weight: bold; text-decoration: none; margin: 0 10px;">Instagram</a> • 
+        <a href="https://github.com/roykashif11-alt/pinktober-breast-ai" target="_blank" style="color: #db2777; font-weight: bold; text-decoration: none; margin: 0 10px;">GitHub</a>
+    </p>
+</div>'''
 st.markdown(footer_html, unsafe_allow_html=True)
