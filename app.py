@@ -29,9 +29,6 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #1e293b; }
     background-color: #fdf2f8;
     background-image: radial-gradient(at 10% 10%, rgba(251, 207, 232, 0.8) 0px, transparent 50%), radial-gradient(at 90% 20%, rgba(244, 114, 182, 0.3) 0px, transparent 50%), radial-gradient(at 50% 80%, rgba(253, 242, 248, 1) 0px, transparent 50%), radial-gradient(at 80% 90%, rgba(251, 207, 232, 0.6) 0px, transparent 50%);
 }
-.glass-card {
-    background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(251, 207, 232, 0.6); border-radius: 24px; padding: 2rem; box-shadow: 0 10px 40px -10px rgba(131, 24, 67, 0.1); margin-bottom: 1.5rem;
-}
 .pink-gradient-text {
     background: linear-gradient(135deg, #be185d 0%, #ec4899 50%, #9d174d 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
@@ -73,7 +70,7 @@ def to_data_uri(img) -> str:
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
 # ------------------------------------------------------------------
-# 4. SIDEBAR (Developer Info & Social Links)
+# 4. SIDEBAR
 # ------------------------------------------------------------------
 with st.sidebar:
     st.markdown("## Model Metrics")
@@ -87,7 +84,7 @@ with st.sidebar:
     st.markdown('<a href="https://github.com/roykashif11-alt/pinktober-breast-ai" target="_blank" class="social-btn">💻 GitHub Repository</a>', unsafe_allow_html=True)
 
 # ------------------------------------------------------------------
-# 5. Header / Hero (With Pink Ribbon)
+# 5. Header / Hero
 # ------------------------------------------------------------------
 ribbon_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNTAgMTAgQzMwIDEwIDIwIDMwIDM1IDUwIEwxNSA5MCBMMzAgOTUgTDUwIDY1IEw3MCA5NSBMODUgOTAgTDY1IDUwIEM4MCAzMCA3MCAxMCA1MCAxMCBaIiBmaWxsPSIjRTA1NjhGIi8+PHBhdGggZD0iTTUwIDEwIEMzMCAxMCAyMCAzMCAzNSA1MCBMMTUgOTAgTDMwIDk1IEw1MCA2NSBMNzAgOTUgTDg1IDkwIEw2NSA1MCBDODAgMzAgNzAgMTAgNTAgMTAgWiIgZmlsbD0idXJsKCNncmFkKSIgb3BhY2l0eT0iMC40Ii8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZmZmZmO3N0b3Atb3BhY2l0eToxIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRTA1NjhGO3N0b3Atb3BhY2l0eTowIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PC9zdmc+"
 
@@ -103,7 +100,6 @@ tab1, tab2, tab3 = st.tabs(["🔬 App Home", "📖 About Project", "💬 AI Assi
 # TAB 1: MAIN APP
 # ==================================================================
 with tab1:
-    # REMOVED the broken HTML wrapper here. Streamlit will now render the uploader perfectly.
     uploaded_file = st.file_uploader("Drop your histopathology slide image here", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
 
     if uploaded_file is not None:
@@ -119,19 +115,35 @@ with tab1:
             overlay = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True, image_weight=0.5)
             verdict = classes[pred_idx]
             is_malignant = verdict == "Malignant"
-            badge_color = "bg-pink-100 text-pink-800 border-pink-300" if is_malignant else "bg-emerald-100 text-emerald-800 border-emerald-300"
-            text_color = "text-pink-900" if is_malignant else "text-emerald-900"
-            conf_color = "text-pink-600" if is_malignant else "text-emerald-600"
             finding_text = "The model highlighted dense, pleomorphic cellular clustering with elevated nucleus-to-cytoplasm ratios in the highlighted thermal region, indicative of malignant ductal hyperplasia." if is_malignant else "Normal glandular duct structures with uniform cell distribution. No significant nuclear hyperchromasia detected across the evaluated tile."
 
-        result_html = f'<div class="glass-card mt-6"><div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-pink-100"><div><span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Model Classification Output</span><div class="flex items-center gap-3 mt-1"><h2 class="text-2xl md:text-3xl font-bold {text_color}">{verdict} Detected</h2><span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border {badge_color}">High Confidence</span></div></div><div class="flex items-center gap-4 bg-white/80 border border-pink-100 rounded-2xl p-3 px-5 shadow-sm"><div class="text-right"><div class="text-xs text-slate-500 font-medium">Confidence Score</div><div class="text-2xl font-black {conf_color}">{confidence:.1%}</div></div></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"><div class="space-y-2"><div class="flex items-center justify-between"><span class="text-sm font-semibold text-slate-700">Original Histopathology Slide</span></div><div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 aspect-video"><img src="{to_data_uri(pil_img.resize((448, 448)))}" class="w-full h-full object-cover"></div></div><div class="space-y-2"><div class="flex items-center justify-between"><span class="text-sm font-semibold text-slate-700">Grad-CAM Attention Heatmap</span></div><div class="relative rounded-2xl overflow-hidden border border-pink-300 bg-slate-900 aspect-video shadow-inner"><img src="{to_data_uri(Image.fromarray(overlay).resize((448, 448)))}" class="w-full h-full object-cover"></div></div></div><div class="mt-6 p-4 md:p-5 rounded-2xl bg-pink-50/60 border border-pink-200/80"><h4 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-2">AI Feature Highlight</h4><p class="text-sm text-slate-600 leading-relaxed">{finding_text}</p></div></div>'
-        st.markdown(result_html, unsafe_allow_html=True)
+        # Native Streamlit Layout (Bulletproof)
+        st.write("---")
+        
+        # Header Section
+        head_col1, head_col2 = st.columns([2, 1])
+        with head_col1:
+            if is_malignant:
+                st.error(f"### ⚠️ {verdict} Detected (High Confidence)")
+            else:
+                st.success(f"### ✅ {verdict} Detected (High Confidence)")
+        with head_col2:
+            st.metric(label="Confidence Score", value=f"{confidence:.1%}")
+
+        # Image Section (Side-by-Side)
+        img_col1, img_col2 = st.columns(2, gap="large")
+        with img_col1:
+            st.image(pil_img.resize((448, 448)), caption="Original Histopathology Slide", use_container_width=True)
+        with img_col2:
+            st.image(Image.fromarray(overlay).resize((448, 448)), caption="Grad-CAM Attention Heatmap", use_container_width=True)
+
+        # Findings Section
+        st.info(f"**AI Feature Highlight:** {finding_text}")
 
 # ==================================================================
-# TAB 2: ABOUT PROJECT (Using Native Streamlit Container)
+# TAB 2: ABOUT PROJECT
 # ==================================================================
 with tab2:
-    # Streamlit native container with border (looks like a card, but won't break)
     with st.container(border=True):
         st.markdown("## 📖 About This Project")
         st.markdown("Built as a submission for Pinktober (Breast Cancer Awareness Month) to demonstrate how Explainable AI can bridge the gap between machine learning and clinical trust.")
