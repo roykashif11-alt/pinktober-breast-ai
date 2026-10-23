@@ -103,9 +103,8 @@ tab1, tab2, tab3 = st.tabs(["🔬 App Home", "📖 About Project", "💬 AI Assi
 # TAB 1: MAIN APP
 # ==================================================================
 with tab1:
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    # REMOVED the broken HTML wrapper here. Streamlit will now render the uploader perfectly.
     uploaded_file = st.file_uploader("Drop your histopathology slide image here", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
-    st.markdown('</div>', unsafe_allow_html=True)
 
     if uploaded_file is not None:
         with st.spinner("Analyzing cellular structures and generating Grad-CAM..."):
@@ -129,25 +128,25 @@ with tab1:
         st.markdown(result_html, unsafe_allow_html=True)
 
 # ==================================================================
-# TAB 2: ABOUT PROJECT (Pure Streamlit, NO HTML)
+# TAB 2: ABOUT PROJECT (Using Native Streamlit Container)
 # ==================================================================
 with tab2:
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown("## 📖 About This Project")
-    st.markdown("Built as a submission for Pinktober (Breast Cancer Awareness Month) to demonstrate how Explainable AI can bridge the gap between machine learning and clinical trust.")
-    st.write("---")
-    col1, col2 = st.columns(2, gap="large")
-    with col1:
-        st.markdown("#### 📊 The Dataset")
-        st.write("I used the **BreaKHis** (Breast Cancer Histopathological Database), which contains thousands of microscopic images of breast tumor tissue collected from clinical cases, labeled as benign or malignant by expert pathologists.")
-        st.markdown("#### 🔍 Explainable AI (Grad-CAM)")
-        st.write("Standard AI is a 'black box.' I implemented **Grad-CAM** to generate the heatmaps shown in the app. This visually explains exactly which cellular regions influenced the prediction, giving pathologists transparency and trust in the model.")
-    with col2:
-        st.markdown("#### 🧠 The AI Model")
-        st.write("The model is based on **MobileNetV2**, utilizing Transfer Learning. It was trained using PyTorch and achieved a **97.22%** accuracy on unseen test images.")
-        st.markdown("#### 💻 Tech Stack")
-        st.write("Built with Python, PyTorch, Streamlit, and Grad-CAM. The complete source code is available on [GitHub](https://github.com/roykashif11-alt/pinktober-breast-ai).")
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Streamlit native container with border (looks like a card, but won't break)
+    with st.container(border=True):
+        st.markdown("## 📖 About This Project")
+        st.markdown("Built as a submission for Pinktober (Breast Cancer Awareness Month) to demonstrate how Explainable AI can bridge the gap between machine learning and clinical trust.")
+        st.write("---")
+        col1, col2 = st.columns(2, gap="large")
+        with col1:
+            st.markdown("#### 📊 The Dataset")
+            st.write("I used the **BreaKHis** (Breast Cancer Histopathological Database), which contains thousands of microscopic images of breast tumor tissue collected from clinical cases, labeled as benign or malignant by expert pathologists.")
+            st.markdown("#### 🔍 Explainable AI (Grad-CAM)")
+            st.write("Standard AI is a 'black box.' I implemented **Grad-CAM** to generate the heatmaps shown in the app. This visually explains exactly which cellular regions influenced the prediction, giving pathologists transparency and trust in the model.")
+        with col2:
+            st.markdown("#### 🧠 The AI Model")
+            st.write("The model is based on **MobileNetV2**, utilizing Transfer Learning. It was trained using PyTorch and achieved a **97.22%** accuracy on unseen test images.")
+            st.markdown("#### 💻 Tech Stack")
+            st.write("Built with Python, PyTorch, Streamlit, and Grad-CAM. The complete source code is available on [GitHub](https://github.com/roykashif11-alt/pinktober-breast-ai).")
 
 # ==================================================================
 # TAB 3: AI ASSISTANT (CHATBOT)
@@ -184,7 +183,7 @@ with tab3:
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 # ------------------------------------------------------------------
-# 7. Footer (Explicit Inline CSS to guarantee visibility)
+# 7. Footer
 # ------------------------------------------------------------------
 footer_html = '''<div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(251, 207, 232, 0.6); text-align: center;">
     <p style="color: #475569; font-size: 0.9rem; margin-bottom: 10px;">Built with <b style="color: #be185d;">PyTorch</b> & <b style="color: #be185d;">Streamlit</b> for Pink October 🎀</p>
