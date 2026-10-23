@@ -96,6 +96,34 @@ st.markdown(
         color: white !important;
         box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
     }
+    
+    /* Sidebar Custom Styling */
+    [data-testid="stSidebar"] {
+        background-color: #0F172A;
+    }
+    [data-testid="stSidebar"] * {
+        color: #CBD5E1 !important;
+    }
+    [data-testid="stSidebar"] h2 {
+        color: #fff !important;
+        font-family: 'Playfair Display', serif;
+    }
+    .social-btn {
+        display: block;
+        background: rgba(255, 255, 255, 0.1);
+        color: #FDF2F8 !important;
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+    .social-btn:hover {
+        background: #db2777;
+        color: #fff !important;
+    }
     </style>
     """), 
     unsafe_allow_html=True
@@ -130,10 +158,33 @@ def to_data_uri(img) -> str:
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
 
 # ------------------------------------------------------------------
-# 4. Header / Hero
+# 4. SIDEBAR (Developer Info & Social Links)
 # ------------------------------------------------------------------
+with st.sidebar:
+    st.markdown("## Model Metrics")
+    st.markdown('<div style="font-size: 3.5rem; font-weight: 900; color: #ec4899 !important; line-height: 1.2;">97.22%</div>', unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 0.9rem;'>Accuracy on held-out test split (BreaKHis Dataset)</p>", unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    st.markdown("### About the Developer")
+    st.markdown("<p style='font-size: 1rem; font-weight: 700; color: #fff !important; margin-bottom: 10px;'>Kashif Sultan</p>", unsafe_allow_html=True)
+    
+    # Social Links
+    st.markdown("""
+    <a href="https://www.linkedin.com/in/kashif-sultan11" target="_blank" class="social-btn">💼 LinkedIn</a>
+    <a href="https://www.instagram.com/kashif_rashtiic/" target="_blank" class="social-btn">📸 Instagram</a>
+    <a href="https://github.com/roykashif11-alt/pinktober-breast-ai" target="_blank" class="social-btn">💻 GitHub Repository</a>
+    """, unsafe_allow_html=True)
+
+# ------------------------------------------------------------------
+# 5. Header / Hero (With Pink Ribbon Base64 SVG)
+# ------------------------------------------------------------------
+# This is the Base64 encoded SVG of the pink ribbon
+ribbon_svg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNTAgMTAgQzMwIDEwIDIwIDMwIDM1IDUwIEwxNSA5MCBMMzAgOTUgTDUwIDY1IEw3MCA5NSBMODUgOTAgTDY1IDUwIEM4MCAzMCA3MCAxMCA1MCAxMCBaIiBmaWxsPSIjRTA1NjhGIi8+PHBhdGggZD0iTTUwIDEwIEMzMCAxMCAyMCAzMCAzNSA1MCBMMTUgOTAgTDMwIDk1IEw1MCA2NSBMNzAgOTUgTDg1IDkwIEw2NSA1MCBDODAgMzAgNzAgMTAgNTAgMTAgWiIgZmlsbD0idXJsKCNncmFkKSIgb3BhY2l0eT0iMC40Ii8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZmZmZmO3N0b3Atb3BhY2l0eToxIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRTA1NjhGO3N0b3Atb3BhY2l0eTowIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PC9zdmc+"
+
 st.markdown(
-    textwrap.dedent("""
+    textwrap.dedent(f"""
     <div class="text-center mb-8 relative z-10">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-100/80 border border-pink-300 text-pink-800 text-xs md:text-sm font-semibold shadow-sm mb-6 animate-pulse-slow">
             <span class="text-base">🎀</span>
@@ -141,10 +192,15 @@ st.markdown(
             <span class="w-1.5 h-1.5 rounded-full bg-pink-600 inline-block"></span>
             <span class="text-pink-600">Pink October</span>
         </div>
-        <h1 class="text-4xl md:text-6xl font-serif font-extrabold tracking-tight mb-4 text-slate-900">
-            See what the <span class="pink-gradient-text">model sees.</span>
-        </h1>
-        <p class="max-w-2xl mx-auto text-slate-600 text-base md:text-lg leading-relaxed">
+        
+        <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <img src="{ribbon_svg}" style="width: 90px; filter: drop-shadow(0 10px 15px rgba(224, 86, 143, 0.4));" alt="Pink Ribbon">
+            <h1 class="text-4xl md:text-6xl font-serif font-extrabold tracking-tight mb-0 text-slate-900">
+                See what the <span class="pink-gradient-text">model sees.</span>
+            </h1>
+        </div>
+        
+        <p class="max-w-2xl mx-auto text-slate-600 text-base md:text-lg leading-relaxed mt-6">
             Upload a stained histopathology tissue slide. Our PyTorch AI model classifies it as 
             <span class="font-semibold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded">benign</span> or 
             <span class="font-semibold text-pink-800 bg-pink-100/80 px-2 py-0.5 rounded">malignant</span>, 
@@ -156,7 +212,7 @@ st.markdown(
 )
 
 # ------------------------------------------------------------------
-# 5. Navigation Menu Bar (Tabs)
+# 6. Navigation Menu Bar (Tabs)
 # ------------------------------------------------------------------
 tab1, tab2, tab3 = st.tabs(["🔬 App Home", "📖 About Project", "💬 AI Assistant"])
 
@@ -236,10 +292,9 @@ with tab1:
         st.markdown(result_html, unsafe_allow_html=True)
 
 # ==================================================================
-# TAB 2: ABOUT PROJECT (FIXED: Using Native Streamlit Components)
+# TAB 2: ABOUT PROJECT
 # ==================================================================
 with tab2:
-    # We use pure Streamlit layout here to guarantee text never breaks into HTML code blocks.
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
     
     st.markdown("## 📖 About This Project")
@@ -311,7 +366,7 @@ with tab3:
         st.session_state.messages.append({"role": "assistant", "content": response})
 
 # ------------------------------------------------------------------
-# 6. Footer
+# 7. Footer (Text and Links)
 # ------------------------------------------------------------------
 st.markdown(
     textwrap.dedent("""
